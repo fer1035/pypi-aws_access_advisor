@@ -1,5 +1,5 @@
-**aws_ssooidc**
-===============
+**aws-access-advisor**
+======================
 
 Overview
 --------
@@ -10,15 +10,15 @@ Prerequisites
 -------------
 
 - *Python >= 3.6*
-- *aws_ssooidc >= 2021.1.1.1* (installed as a dependency)
-- *boto3 >= 1.17.78* (installed as a dependency)
+- *[aws-ssooidc](https://pypi.org/project/aws-ssooidc/) >= 2021.1.1.1*
+- *[boto3](https://pypi.org/project/boto3/) >= 1.17.78*
 
 Required Arguments
 ------------------
 
 - AWS account ID
 - AWS entity ARN (role, user, etc. to use for report generation)
-- AWS SSO Permission Set name for login purposes
+- AWS SSO Permission Set (admin role) name for login purposes
 - AWS SSO login URL
 
 Usage
@@ -27,17 +27,17 @@ Usage
 Installation:
 
 ```bash
-pip3 install aws_access_advisor
+pip3 install aws-access-advisor
 # or
-python3 -m pip install aws_access_advisor
+python3 -m pip install aws-access-advisor
 ```
 
 In Python3:
 
 ```python
-import <file_name_without_.py>
-auth = <file_name_without_.py>.login("<account_id>", "<sso_url>", "<admin_role_name>")
-report = <file_nafile_name_without_.pyme>.get_report(
+import aws_access_advisor as access
+auth = access.login("<account_id>", "<sso_url>", "<admin_role_name>")
+report = access.get_report(
     "<entity_role_arn>",
     auth["roleCredentials"]["accessKeyId"],
     auth["roleCredentials"]["secretAccessKey"],
@@ -59,7 +59,7 @@ for obj in report["ServicesLastAccessed"]:
 In BASH:
 
 ```bash
-python <file_name_with_.py> \
+python [/path/to/module/]__init__.py \
    -a <account_id> \
    -e <entity_role_arn> \
    -r <admin_role_name> \  # [OPTIONAL]

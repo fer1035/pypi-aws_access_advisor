@@ -42,7 +42,7 @@ import boto3
 import aws_ssooidc as sso
 
 
-__version__ = '2022.10.1.1'
+__version__ = '2022.10.1.2'
 
 
 def login(account_id: str, url: str, admin_role: str) -> dict:
