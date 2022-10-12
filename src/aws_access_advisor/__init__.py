@@ -1,40 +1,4 @@
-r"""
-Parse AWS Access Advisor output.
-
-Prerequisite dependencies:
-    1. boto3: https://pypi.org/project/boto3/
-    2. aws-ssooidc: https://pypi.org/project/aws-ssooidc/
-    3. SSO access to the target account with sufficient privileges.
-
-Execute as a function:
-    import <file_name_without_.py>
-    auth = <file_name_without_.py>.login("<account_id>", "<sso_url>", "<admin_role_name>")
-    report = <file_nafile_name_without_.pyme>.get_report(
-        "<entity_role_arn>",
-        auth["roleCredentials"]["accessKeyId"],
-        auth["roleCredentials"]["secretAccessKey"],
-        auth["roleCredentials"]["sessionToken"]
-    )
-    print(
-        f'Job status: {report["JobStatus"]} after {report["processing_time"]} second(s).'
-    )
-    for obj in report["ServicesLastAccessed"]:
-        if "LastAuthenticatedEntity" in obj:
-            try:
-                for obj_in in obj["TrackedActionsLastAccessed"]:
-                    if "LastAccessedEntity" in obj_in:
-                        print(f'"{obj["ServiceNamespace"]}:{obj_in["ActionName"]}",')
-            except Exception as e:
-                print(f'"{obj["ServiceNamespace"]}:*",')
-
-Execute as a script:
-    python <file_name_with_.py> \
-    -a <account_id> \
-    -e <entity_role_arn> \
-    -r <admin_role_name> \  # [OPTIONAL]
-    -u <sso_url> \  # [OPTIONAL]
-    > <output_path>
-"""
+"""Parse AWS Access Advisor output."""
 import json
 import time
 import argparse
@@ -42,7 +6,7 @@ import boto3
 import aws_ssooidc as sso
 
 
-__version__ = '2022.10.1.2'
+__version__ = '2022.10.1.3'
 
 
 def login(account_id: str, url: str, admin_role: str) -> dict:
@@ -89,6 +53,24 @@ def get_report(
     return response_report
 
 
+def parse(report: dict) -> list:
+    """
+    Parse AWS Access Advisor report.
+
+    return list
+    """
+    actions = []
+    for obj in report["ServicesLastAccessed"]:
+        if "LastAuthenticatedEntity" in obj:
+            try:
+                for obj_in in obj["TrackedActionsLastAccessed"]:
+                    if "LastAccessedEntity" in obj_in:
+                        actions.append(f'{obj["ServiceNamespace"]}:{obj_in["ActionName"]}')
+            except Exception as e:
+                actions.append(f'{obj["ServiceNamespace"]}:*')
+    return actions
+
+
 if __name__ == "__main__":
 
     myparser = argparse.ArgumentParser(
@@ -119,7 +101,9 @@ if __name__ == "__main__":
         "--role",
         action="store",
         help="AWS admin role ARN",
-        required=False,
+        # nargs="?",
+        # default="",
+        required=True,
         type=str,
     )
     myparser.add_argument(
@@ -127,7 +111,9 @@ if __name__ == "__main__":
         "--url",
         action="store",
         help="AWS SSO login URL",
-        required=False,
+        # nargs="?",
+        # default="",
+        required=True,
         type=str,
     )
     args = myparser.parse_args()
@@ -142,11 +128,4 @@ if __name__ == "__main__":
     print(
         f'Job status: {report["JobStatus"]} after {report["processing_time"]} second(s).'
     )
-    for obj in report["ServicesLastAccessed"]:
-        if "LastAuthenticatedEntity" in obj:
-            try:
-                for obj_in in obj["TrackedActionsLastAccessed"]:
-                    if "LastAccessedEntity" in obj_in:
-                        print(f'"{obj["ServiceNamespace"]}:{obj_in["ActionName"]}",')
-            except Exception as e:
-                print(f'"{obj["ServiceNamespace"]}:*",')
+    print('\n'.join(parse(report)))

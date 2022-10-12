@@ -38,6 +38,7 @@ In Python3:
 .. code-block:: BASH
 
    import aws_access_advisor as access
+
    auth = access.login("<account_id>", "<sso_url>", "<admin_role_name>")
    report = access.get_report(
       "<entity_role_arn>",
@@ -48,15 +49,7 @@ In Python3:
    print(
       f'Job status: {report["JobStatus"]} after {report["processing_time"]} second(s).'
    )
-   for obj in report["ServicesLastAccessed"]:
-      if "LastAuthenticatedEntity" in obj:
-         try:
-               for obj_in in obj["TrackedActionsLastAccessed"]:
-                  if "LastAccessedEntity" in obj_in:
-                     print(f'"{obj["ServiceNamespace"]}:{obj_in["ActionName"]}",')
-         except Exception as e:
-               print(f'"{obj["ServiceNamespace"]}:*",')
-
+   print('\n'.join(access.parse(report)))
 In BASH:
 
 .. code-block:: BASH

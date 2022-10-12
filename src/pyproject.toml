@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "aws_access_advisor"
-version = "2022.10.1.2"
+version = "2022.10.1.3"
 description = "Generate IAM actions list from AWS Access Advisor reports."
 readme = "README.rst"
 authors = ["Ahmad Ferdaus Abd Razak <ahmad.ferdaus.abd.razak@ni.com>"]
