@@ -50,6 +50,7 @@ In Python3:
       f'Job status: {report["JobStatus"]} after {report["processing_time"]} second(s).'
    )
    print('\n'.join(access.parse(report)))
+
 In BASH:
 
 .. code-block:: BASH
