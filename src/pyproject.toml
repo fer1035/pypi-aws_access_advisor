@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "aws_access_advisor"
+version = "2022.10.1.1"
+description = "Generate IAM actions list from AWS Access Advisor reports."
+readme = "README.rst"
+authors = ["Ahmad Ferdaus Abd Razak <ahmad.ferdaus.abd.razak@ni.com>"]
+license = "GPL-2.0-only"
+repository = "https://github.com/fer1035/pypi-aws_access_advisor"
+keywords = ["AWS", "Access", "Advisor"]
+
+[tool.poetry.dependencies]
+python = "^3.6"
+boto3 = "^1.17.78"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
