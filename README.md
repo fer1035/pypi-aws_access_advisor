@@ -50,13 +50,13 @@ In Python3 authenticating with named profiles:
 import aws_access_advisor as access
 
 report = access.get_report(
-    <entity_arn>,
-    profile_name=<profile_name>,
+    "<entity_arn>",
+    profile_name="<profile_name>",
 )
 print(
     f'Job status: {report["JobStatus"]} after {report["processing_time"]} second(s).'
 )
-print("\n".join(parse(report)))
+print("\n".join(access.parse(report)))
 ```
 
 In Python3 authenticating with IAM access key credentials:
@@ -65,14 +65,14 @@ In Python3 authenticating with IAM access key credentials:
 import aws_access_advisor as access
 
 report = access.get_report(
-    <entity_arn>,
-    access_key_id=<access_key_id>,
-    secret_access_key=<secret_access_key>,
+    "<entity_arn>",
+    access_key_id="<access_key_id>",
+    secret_access_key="<secret_access_key>",
 )
 print(
     f'Job status: {report["JobStatus"]} after {report["processing_time"]} second(s).'
 )
-print("\n".join(parse(report)))
+print("\n".join(access.parse(report)))
 ```
 
 In Python3 authenticating with SSO:
@@ -81,15 +81,15 @@ In Python3 authenticating with SSO:
 import aws_access_advisor as access
 
 report = access.get_report(
-    <entity_arn>,
-    sso_url=<sso_url>,
-    sso_role_name=<sso_role_name>,
-    sso_account_id=<sso_account_id>,
+    "<entity_arn>",
+    sso_url="<sso_url>",
+    sso_role_name="<sso_role_name>",
+    sso_account_id="<sso_account_id>",
 )
 print(
     f'Job status: {report["JobStatus"]} after {report["processing_time"]} second(s).'
 )
-print("\n".join(parse(report)))
+print("\n".join(access.parse(report)))
 ```
 
 In BASH authenticating with named profiles:
