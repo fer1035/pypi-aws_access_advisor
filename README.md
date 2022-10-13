@@ -16,9 +16,21 @@ Prerequisites
 Required Arguments
 ------------------
 
-- AWS account ID
 - AWS entity ARN (role, user, etc. to use for report generation)
-- AWS SSO Permission Set (admin role) name for login purposes
+
+Optional Arguments
+------------------
+
+If authenticating with named profiles:
+- AWSCLI profile name
+
+Of authenticating with IAM acccess key credentials:
+- AWS access key id
+- AWS secret access key
+
+If authenticating with SSO:
+- AWS account ID
+- AWS SSO Permission Set (role) name
 - AWS SSO login URL
 
 Usage
@@ -32,30 +44,77 @@ pip3 install aws-access-advisor
 python3 -m pip install aws-access-advisor
 ```
 
-In Python3:
+In Python3 authenticating with named profiles:
 
 ```python
 import aws_access_advisor as access
-auth = access.login("<account_id>", "<sso_url>", "<admin_role_name>")
+
 report = access.get_report(
-    "<entity_role_arn>",
-    auth["roleCredentials"]["accessKeyId"],
-    auth["roleCredentials"]["secretAccessKey"],
-    auth["roleCredentials"]["sessionToken"]
+    <entity_arn>,
+    profile_name=<profile_name>,
 )
 print(
     f'Job status: {report["JobStatus"]} after {report["processing_time"]} second(s).'
 )
-print('\n'.join(access.parse(report)))
+print("\n".join(parse(report)))
 ```
 
-In BASH:
+In Python3 authenticating with IAM access key credentials:
+
+```python
+import aws_access_advisor as access
+
+report = access.get_report(
+    <entity_arn>,
+    access_key_id=<access_key_id>,
+    secret_access_key=<secret_access_key>,
+)
+print(
+    f'Job status: {report["JobStatus"]} after {report["processing_time"]} second(s).'
+)
+print("\n".join(parse(report)))
+```
+
+In Python3 authenticating with SSO:
+
+```python
+import aws_access_advisor as access
+
+report = access.get_report(
+    <entity_arn>,
+    sso_url=<sso_url>,
+    sso_role_name=<sso_role_name>,
+    sso_account_id=<sso_account_id>,
+)
+print(
+    f'Job status: {report["JobStatus"]} after {report["processing_time"]} second(s).'
+)
+print("\n".join(parse(report)))
+```
+
+In BASH authenticating with named profiles:
 
 ```bash
-python [/path/to/module/]__init__.py \
-   -a <account_id> \
-   -e <entity_role_arn> \
-   -r <admin_role_name> \  # [OPTIONAL]
-   -u <sso_url> \  # [OPTIONAL]
-   > <output_path>
+python aws_access_advisor \
+-e <entity_arn> \
+-p <profile_name>
+```
+
+In BASH authenticating with IAM access key credentials:
+
+```bash
+python aws_access_advisor \
+-e <entity_arn> \
+-k <access_key_id> \
+-s <secret_access_key>
+```
+
+In BASH authenticating with SSO:
+
+```bash
+python aws_access_advisor \
+-e <entity_arn> \
+-a <sso_account_id> \
+-r <sso_role_name> \
+-u <sso_url>
 ```
