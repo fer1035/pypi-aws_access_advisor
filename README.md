@@ -95,7 +95,7 @@ print("\n".join(parse(report)))
 In BASH authenticating with named profiles:
 
 ```bash
-python aws_access_advisor \
+python [/path/to/module/]aws_access_advisor \
 -e <entity_arn> \
 -p <profile_name>
 ```
@@ -103,7 +103,7 @@ python aws_access_advisor \
 In BASH authenticating with IAM access key credentials:
 
 ```bash
-python aws_access_advisor \
+python [/path/to/module/]aws_access_advisor \
 -e <entity_arn> \
 -k <access_key_id> \
 -s <secret_access_key>
@@ -112,7 +112,7 @@ python aws_access_advisor \
 In BASH authenticating with SSO:
 
 ```bash
-python aws_access_advisor \
+python [/path/to/module/]aws_access_advisor \
 -e <entity_arn> \
 -a <sso_account_id> \
 -r <sso_role_name> \

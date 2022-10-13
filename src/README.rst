@@ -100,7 +100,7 @@ In BASH authenticating with named profiles:
 
 .. code-block:: BASH
 
-   python aws_access_advisor \
+   python [/path/to/module/]aws_access_advisor \
    -e <entity_arn> \
    -p <profile_name>
 
@@ -108,7 +108,7 @@ In BASH authenticating with IAM access key credentials:
 
 .. code-block:: BASH
 
-   python aws_access_advisor \
+   python [/path/to/module/]aws_access_advisor \
    -e <entity_arn> \
    -k <access_key_id> \
    -s <secret_access_key>
@@ -117,7 +117,7 @@ In BASH authenticating with SSO:
 
 .. code-block:: BASH
 
-   python aws_access_advisor \
+   python [/path/to/module/]aws_access_advisor \
    -e <entity_arn> \
    -a <sso_account_id> \
    -r <sso_role_name> \
