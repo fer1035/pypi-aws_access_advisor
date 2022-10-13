@@ -23,13 +23,16 @@ Optional Arguments
 ------------------
 
 If authenticating with named profiles:
+
 - AWSCLI profile name
 
-Of authenticating with IAM acccess key credentials:
+If authenticating with IAM acccess key credentials:
+
 - AWS access key id
 - AWS secret access key
 
 If authenticating with SSO:
+
 - AWS account ID
 - AWS SSO Permission Set (role) name
 - AWS SSO login URL
