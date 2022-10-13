@@ -24,7 +24,7 @@ Optional Arguments
 If authenticating with named profiles:
 - AWSCLI profile name
 
-Of authenticating with IAM acccess key credentials:
+If authenticating with IAM acccess key credentials:
 - AWS access key id
 - AWS secret access key
 
