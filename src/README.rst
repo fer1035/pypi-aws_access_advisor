@@ -11,8 +11,8 @@ Prerequisites
 -------------
 
 - *Python >= 3.6*
-- *`aws-ssooidc <https://pypi.org/project/aws-ssooidc/>`_ >= 2021.1.1.1*
-- *`boto3 <https://pypi.org/project/boto3/>`_ >= 1.17.78*
+- *aws-ssooidc (https://pypi.org/project/aws-ssooidc/) >= 2021.1.1.1*
+- *boto3 (https://pypi.org/project/boto3/) >= 1.17.78*
 
 Required Arguments
 ------------------
