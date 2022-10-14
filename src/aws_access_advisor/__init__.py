@@ -85,15 +85,13 @@ def parse(report: dict) -> list:
     """
     actions = []
     for obj in report["ServicesLastAccessed"]:
-        if "LastAuthenticatedEntity" in obj:
-            try:
-                for obj_in in obj["TrackedActionsLastAccessed"]:
-                    if "LastAccessedEntity" in obj_in:
-                        actions.append(
-                            f'{obj["ServiceNamespace"]}:{obj_in["ActionName"]}'
-                        )
-            except Exception as e:
-                actions.append(f'{obj["ServiceNamespace"]}:*')
+        try:
+            for obj_in in obj["TrackedActionsLastAccessed"]:
+                actions.append(
+                    f'{obj["ServiceNamespace"]}:{obj_in["ActionName"]}'
+                )
+        except Exception as e:
+            actions.append(f'{obj["ServiceNamespace"]}:*')
     return actions
 
 
@@ -106,7 +104,7 @@ def get_params():
         usage="%(prog)s [options]",
     )
     myparser.add_argument(
-        "-v", "--version", action="version", version="%(prog)s 2122.10.1.4"
+        "-v", "--version", action="version", version="%(prog)s 2122.10.1.9"
     )
     myparser.add_argument(
         "-e",
