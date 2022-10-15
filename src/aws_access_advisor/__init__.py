@@ -2,29 +2,15 @@
 import json
 import time
 import argparse
-import boto3
-import aws_ssooidc as sso
+import aws_authenticator
 
 
-__version__ = "2022.10.1.4"
-
-
-def login(account_id: str, url: str, admin_role: str) -> dict:
-    """
-    Login to AWS account through SSO.
-
-    return dict
-    """
-    access_token = sso.gettoken(url)["accessToken"]
-    client = boto3.client("sso")
-    response_login = client.get_role_credentials(
-        roleName=admin_role, accountId=account_id, accessToken=access_token
-    )
-    return response_login
+__version__ = "2022.10.2.0"
 
 
 def get_report(
     entity_arn: str,
+    auth_method: str,
     profile_name: str = None,
     access_key_id: str = None,
     secret_access_key: str = None,
@@ -37,29 +23,20 @@ def get_report(
 
     return dict
     """
-    if profile_name is not None:
-        session = boto3.Session(profile_name=profile_name)
-    elif access_key_id is not None and secret_access_key is not None:
-        access_key_id = access_key_id
-        secret_access_key = secret_access_key
-        session = boto3.Session(
-            aws_access_key_id=access_key_id, aws_secret_access_key=secret_access_key
-        )
-    elif (
-        sso_role_name is not None and sso_url is not None and sso_account_id is not None
-    ):
-        auth = login(sso_account_id, sso_url, sso_role_name)
-        access_key_id = auth["roleCredentials"]["accessKeyId"]
-        secret_access_key = auth["roleCredentials"]["secretAccessKey"]
-        session_token = auth["roleCredentials"]["sessionToken"]
-        session = boto3.Session(
-            aws_access_key_id=access_key_id,
-            aws_secret_access_key=secret_access_key,
-            aws_session_token=session_token,
-        )
-    else:
-        raise Exception("Invalid authentication parameter(s)")
-
+    auth = aws_authenticator.AWSAuthenticator(
+        profile_name=profile_name,
+        access_key_id=access_key_id,
+        secret_access_key=secret_access_key,
+        sso_url=sso_url,
+        sso_role_name=sso_role_name,
+        sso_account_id=sso_account_id,
+    )
+    if auth_method == "profile":
+        session = auth.profile()
+    if auth_method == "iam":
+        session = auth.iam()
+    if auth_method == "sso":
+        session = auth.sso()
     client = session.client("iam")
     response_job = client.generate_service_last_accessed_details(
         Arn=entity_arn, Granularity="ACTION_LEVEL"
@@ -104,13 +81,21 @@ def get_params():
         usage="%(prog)s [options]",
     )
     myparser.add_argument(
-        "-v", "--version", action="version", version="%(prog)s 2122.10.1.9"
+        "-v", "--version", action="version", version="%(prog)s 2122.10.2.0"
     )
     myparser.add_argument(
         "-e",
         "--entity_arn",
         action="store",
         help="AWS entity role ARN for access report generation.",
+        required=True,
+        type=str,
+    )
+    myparser.add_argument(
+        "-m",
+        "--auth_method",
+        action="store",
+        help="AWS authentication method. Valid values can be profile, iam, or sso.",
         required=True,
         type=str,
     )
@@ -183,6 +168,7 @@ def main():
     params = get_params()
     report = get_report(
         params.entity_arn,
+        params.auth_method,
         profile_name=params.profile_name,
         access_key_id=params.access_key_id,
         secret_access_key=params.secret_access_key,
