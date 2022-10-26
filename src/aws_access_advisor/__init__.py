@@ -5,7 +5,7 @@ import argparse
 import aws_authenticator
 
 
-__version__ = "2022.10.2.0"
+__version__ = "2022.10.2.1"
 
 
 def get_report(
@@ -81,7 +81,7 @@ def get_params():
         usage="%(prog)s [options]",
     )
     myparser.add_argument(
-        "-v", "--version", action="version", version="%(prog)s 2122.10.2.0"
+        "-v", "--version", action="version", version="%(prog)s 2022.10.2.1"
     )
     myparser.add_argument(
         "-e",
